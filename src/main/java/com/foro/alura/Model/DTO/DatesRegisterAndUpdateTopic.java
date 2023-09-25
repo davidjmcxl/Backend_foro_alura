@@ -1,5 +1,6 @@
 package com.foro.alura.Model.DTO;
 
+import com.foro.alura.Model.Entities.User;
 import jakarta.validation.constraints.NotBlank;
 
 public record DatesRegisterAndUpdateTopic(
@@ -12,7 +13,7 @@ public record DatesRegisterAndUpdateTopic(
         String estatus,
         @NotBlank
         String curso,
-        @NotBlank
-        String autor
+
+        User user
 ) {
 }

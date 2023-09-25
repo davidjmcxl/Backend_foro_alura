@@ -2,6 +2,8 @@ package com.foro.alura.Service;
 
 
 import com.foro.alura.Model.DTO.DatesRegisterAndUpdateTopic;
+import com.foro.alura.Model.DTO.ListTopicsDTO;
+import com.foro.alura.Model.DTO.ListUserDTO;
 import com.foro.alura.Model.Entities.Topic;
 import com.foro.alura.Repository.TopicRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,9 +20,9 @@ public class TopicService {
     @Autowired
     private TopicRepository topicRepository;
 
-    public Page<Topic> getTopics(Pageable paginacion) {
-
-        return topicRepository.findAll(paginacion);
+    public Page<ListTopicsDTO> getTopics(Pageable paginacion) {
+        var topics=topicRepository.findAll(paginacion).map(ListTopicsDTO::new);
+        return topics;
     }
 
     public Topic registerTopic(DatesRegisterAndUpdateTopic datesRegisterTopic) {
@@ -58,7 +60,7 @@ public class TopicService {
         if (existingTopicOptional.isPresent()) {
             Topic existingTopic = existingTopicOptional.get();
             existingTopic.setTitulo(datesUdateTopic.titulo());
-            existingTopic.setAutor(datesUdateTopic.autor());
+            existingTopic.setUser(datesUdateTopic.user());
             existingTopic.setCurso(datesUdateTopic.curso());
             existingTopic.setMensaje(datesUdateTopic.mensaje());
             existingTopic.setFecha_creacion(datesUdateTopic.fecha_creacion());
@@ -72,8 +74,9 @@ public class TopicService {
     }
 
     public void deleteTopic( Long id) {
+
        if(!topicRepository.existsById(id)){
-           throw new EntityNotFoundException("No se encontró un tema con el ID proporcionado");
+           throw new ValidationException("No se encontró un tema con el ID proporcionado");
        }
         topicRepository.deleteById(id);
     }

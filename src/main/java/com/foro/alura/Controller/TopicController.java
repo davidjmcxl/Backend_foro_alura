@@ -1,6 +1,7 @@
 package com.foro.alura.Controller;
 
 import com.foro.alura.Model.DTO.DatesRegisterAndUpdateTopic;
+import com.foro.alura.Model.DTO.ListTopicsDTO;
 import com.foro.alura.Model.Entities.Topic;
 import com.foro.alura.Service.TopicService;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping("/topics")
@@ -20,7 +23,7 @@ public class TopicController {
     TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<Page<Topic>> getTopics(@PageableDefault(size = 10) Pageable paginacion) {
+    public ResponseEntity<Page<ListTopicsDTO>> getTopics(@PageableDefault(size = 10) Pageable paginacion) {
         var topics=topicService.getTopics(paginacion);
         return ResponseEntity.ok(topics);
     }
