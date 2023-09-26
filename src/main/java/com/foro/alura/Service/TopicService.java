@@ -25,7 +25,7 @@ public class TopicService {
         return topics;
     }
 
-    public Topic registerTopic(DatesRegisterAndUpdateTopic datesRegisterTopic) {
+    public ListTopicsDTO registerTopic(DatesRegisterAndUpdateTopic datesRegisterTopic) {
 
         if (topicRepository.existsByTitulo(datesRegisterTopic.titulo())) {
 
@@ -37,14 +37,15 @@ public class TopicService {
 
         Topic topic = topicRepository.save(new Topic(datesRegisterTopic));
 
-        return topic;
+        ListTopicsDTO responseTopic= new ListTopicsDTO(topic);
+        return responseTopic;
     }
 
-    public Topic getTopicById(Long id) {
+    public ListTopicsDTO getTopicById(Long id) {
         if (!topicRepository.existsById(id)) {
             throw new ValidationException("no existe tema con ese id");
         }
-        Topic topic = topicRepository.findById(id).get();
+        ListTopicsDTO topic = topicRepository.findById(id).map(ListTopicsDTO::new).get();
 
         return topic;
     }

@@ -16,4 +16,5 @@ public record DatesRegisterAndUpdateTopic(
 
         User user
 ) {
+
 }

@@ -1,11 +1,14 @@
 package com.foro.alura.Controller;
 
 import com.foro.alura.Model.DTO.DatesRegisterAndUpdateTopic;
+import com.foro.alura.Model.DTO.ListResponseDTO;
 import com.foro.alura.Model.DTO.ListTopicsDTO;
+import com.foro.alura.Model.DTO.RegisterAndUpdateResponse;
 import com.foro.alura.Model.Entities.ResponseTopic;
 import com.foro.alura.Model.Entities.Topic;
 import com.foro.alura.Service.ResponseTopicService;
 import com.foro.alura.Service.TopicService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +19,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/responseTopics")
+@SecurityRequirement(name = "bearer-key")
 public class ResponseTopicController {
     @Autowired
     ResponseTopicService responseTopicService;
 
     @GetMapping
-    public ResponseEntity<Page<ResponseTopic>> getResponses(@PageableDefault(size = 10) Pageable paginacion) {
+    public ResponseEntity<Page<ListResponseDTO> >getResponses(@PageableDefault(size = 10) Pageable paginacion) {
         var respTopics=responseTopicService.getResponsTopics(paginacion);
         return ResponseEntity.ok(respTopics);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseTopic> getResponseTopicById(@PathVariable Long id) {
+    public ResponseEntity<ListResponseDTO> getResponseTopicById(@PathVariable Long id) {
         var respTopicByid = responseTopicService.getResponseTopicById(id);
 
-        return   ResponseEntity.ok( respTopicByid);
+        return   ResponseEntity.ok(respTopicByid);
     }
 
     @PostMapping
-    public ResponseEntity<ResponseTopic> registerResponseTopic(@RequestBody @Valid ResponseTopic datesRegister) {
+    public ResponseEntity<ListResponseDTO> registerResponseTopic(@RequestBody @Valid RegisterAndUpdateResponse datesRegister) {
 
-        ResponseTopic respTopicSave = responseTopicService.registerResponseTopic(datesRegister);
+        ListResponseDTO respTopicSave = responseTopicService.registerResponseTopic(datesRegister);
         return ResponseEntity.ok().body(respTopicSave);
 
     }
@@ -46,7 +50,7 @@ public class ResponseTopicController {
     public ResponseEntity<ResponseTopic> updateResponseTopic(@RequestBody @Valid ResponseTopic datesUpdateRespTopic, @PathVariable Long id) {
 
         ResponseTopic topicRespSave = responseTopicService.UdpdateTopic(datesUpdateRespTopic,id);
-        return ResponseEntity.ok().body(topicRespSave);
+        return ResponseEntity.ok().build();
 
     }
     @DeleteMapping("/{id}")

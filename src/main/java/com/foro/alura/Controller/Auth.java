@@ -8,6 +8,7 @@ import com.foro.alura.Model.Entities.User;
 import com.foro.alura.Repository.UserRepository;
 import com.foro.alura.infra.security.DatosJWTToken;
 import com.foro.alura.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@SecurityRequirement(name = "bearer-key")
 public class Auth {
     @Autowired
     private AuthenticationManager authenticationManager;

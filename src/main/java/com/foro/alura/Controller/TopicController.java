@@ -4,6 +4,7 @@ import com.foro.alura.Model.DTO.DatesRegisterAndUpdateTopic;
 import com.foro.alura.Model.DTO.ListTopicsDTO;
 import com.foro.alura.Model.Entities.Topic;
 import com.foro.alura.Service.TopicService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/topics")
+@SecurityRequirement(name = "bearer-key")
 public class TopicController {
     @Autowired
     TopicService topicService;
@@ -28,16 +30,16 @@ public class TopicController {
         return ResponseEntity.ok(topics);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Topic> getTopicById(@PathVariable Long id) {
+    public ResponseEntity<ListTopicsDTO> getTopicById(@PathVariable Long id) {
         var topicByid = topicService.getTopicById(id);
 
         return   ResponseEntity.ok( topicByid);
     }
 
     @PostMapping
-    public ResponseEntity<Topic> registerTopic(@RequestBody @Valid DatesRegisterAndUpdateTopic datesRegisterTopic) {
+    public ResponseEntity<ListTopicsDTO> registerTopic(@RequestBody @Valid DatesRegisterAndUpdateTopic datesRegisterTopic) {
 
-            Topic topicSave = this.topicService.registerTopic(datesRegisterTopic);
+            ListTopicsDTO topicSave = this.topicService.registerTopic(datesRegisterTopic);
             return ResponseEntity.ok().body(topicSave);
 
     }
@@ -46,7 +48,7 @@ public class TopicController {
     public ResponseEntity<Topic> updateTopic(@RequestBody @Valid DatesRegisterAndUpdateTopic datesUpdateTopic, @PathVariable Long id) {
 
         Topic topicSave = this.topicService.UdpdateTopic(datesUpdateTopic,id);
-        return ResponseEntity.ok().body(topicSave);
+        return ResponseEntity.ok().build();
 
     }
     @DeleteMapping("/{id}")

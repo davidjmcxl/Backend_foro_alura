@@ -9,9 +9,7 @@ public record UpdateUserDTO(
         @NotBlank
         @Email
         String email,
-        @NotBlank
 
-        String password,
         @NotBlank
         String telefono,
         @NotBlank

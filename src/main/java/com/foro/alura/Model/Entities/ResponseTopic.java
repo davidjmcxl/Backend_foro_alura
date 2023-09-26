@@ -1,5 +1,6 @@
 package com.foro.alura.Model.Entities;
 
+import com.foro.alura.Model.DTO.RegisterAndUpdateResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,11 @@ public class ResponseTopic {
     private Topic topic;
     @ManyToOne
     private User user;
+
+    public ResponseTopic(RegisterAndUpdateResponse responseTopic) {
+        this.response=responseTopic.response();
+        this.fecha_creacion=responseTopic.fecha_creacion();
+        this.topic=responseTopic.topic();
+        this.user=responseTopic.user();
+    }
 }

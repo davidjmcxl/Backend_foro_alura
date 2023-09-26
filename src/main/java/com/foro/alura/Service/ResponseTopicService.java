@@ -1,7 +1,9 @@
 package com.foro.alura.Service;
 
 import com.foro.alura.Model.DTO.DatesRegisterAndUpdateTopic;
+import com.foro.alura.Model.DTO.ListResponseDTO;
 import com.foro.alura.Model.DTO.ListTopicsDTO;
+import com.foro.alura.Model.DTO.RegisterAndUpdateResponse;
 import com.foro.alura.Model.Entities.ResponseTopic;
 import com.foro.alura.Model.Entities.Topic;
 import com.foro.alura.Repository.ResponseTopicRepository;
@@ -19,23 +21,23 @@ public class ResponseTopicService {
     @Autowired
     private ResponseTopicRepository responseTopicRepository;
 
-    public Page<ResponseTopic> getResponsTopics(Pageable paginacion) {
-        var resptopics = responseTopicRepository.findAll(paginacion);
+    public Page<ListResponseDTO> getResponsTopics(Pageable paginacion) {
+        var resptopics = responseTopicRepository.findAll(paginacion).map(ListResponseDTO::new);
         return resptopics;
     }
 
-    public ResponseTopic registerResponseTopic(ResponseTopic responseTopic) {
+    public ListResponseDTO registerResponseTopic(RegisterAndUpdateResponse responseTopic) {
 
-        ResponseTopic resptopic = responseTopicRepository.save(responseTopic);
-
-        return resptopic;
+        ResponseTopic respTopic = responseTopicRepository.save(new ResponseTopic(responseTopic));
+        var respTopicDTO= new ListResponseDTO(respTopic);
+        return respTopicDTO;
     }
 
-    public ResponseTopic getResponseTopicById(Long id) {
+    public ListResponseDTO getResponseTopicById(Long id) {
         if (!responseTopicRepository.existsById(id)) {
             throw new ValidationException("no existe una respuesta con ese id");
         }
-        ResponseTopic responseTopic= responseTopicRepository.findById(id).get();
+        var responseTopic= responseTopicRepository.findById(id).map(ListResponseDTO::new).get();
 
         return responseTopic;
     }
